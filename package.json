@@ -1,0 +1,16 @@
+{
+    "name": "packsstatistics",
+    "version": "0.0.1",
+    "description": "Desctop application to track hearthstone packs opening",
+    "main": "index.js",
+    "author": "MrStyx <gridxeclipse@gmail.com>",
+    "scripts": {
+        "start": "electron index.js"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "debug": "^2.2.0",
+        "extend": "^3.0.0",
+        "electron": "^1.7.9"
+    }
+}
