@@ -116,7 +116,7 @@ LogWatcher.prototype.parseBuffer = function (buffer, parserState) {
           cardType: parts[3],
           isGolden: parts[4] == 'GOLDEN'
         };
-
+        console.log('card gained');
         self.emit('card-gained', data);
     }
 

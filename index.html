@@ -1,11 +1,72 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Hearthstone Packs Statistics</title>
-</head>
-<body>
-    <h1>PACKS!</h1>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Hearthstone Packs Statistics</title>
+
+        <style>
+            body {
+                background: rgb(31, 31, 31);
+                color: #fff;
+                font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+            }
+
+            h1 {
+                margin-top: 100px;
+                font-weight: 300;
+                text-align: center;
+                color: rgb(255, 255, 255);
+            }
+        </style>
+    </head>
+    <body id="app">
+        <h1>The window :)</h1>
+
+        <button id="show-cards">Show my packs</button>
+
+        <ol id="cards"></ol>
+
+        <script>
+            import {pack} from "./controller/pack.js";
+            const unirest = require('unirest');
+            const Q = require('q');
+
+            document.getElementById("show-cards")
+            .addEventListener("click", function () {
+                let list = document.getElementById("cards");
+
+                Q.fcall(function () {
+                    return pack.find({})
+                })
+                .then(function (packs) {
+
+                    // Clear list
+                    list.innerHTML = "";
+
+                    for (let pack of packs) {
+                        let node = document.createElement("LI");
+
+                        for (let card of pack.cards) {
+                            let img = document.createElement('img');
+                            img.src = card.isGolden ? card.card.imgGold : card.card.img;
+
+                            img.style.width = '130px';
+                            img.alt = card.card.name;
+
+                            node.appendChild(img); 
+                        }
+                        
+                        // Append new pack
+                        list.appendChild(node);
+                    }
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+            });
+        </script>
+
+        <script src="index.js"></script>
+    </body>
 </html>

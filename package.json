@@ -1,16 +1,23 @@
 {
-    "name": "packsstatistics",
+    "name": "packs-statistic",
     "version": "0.0.1",
     "description": "Desctop application to track hearthstone packs opening",
     "main": "index.js",
     "author": "MrStyx <gridxeclipse@gmail.com>",
     "scripts": {
-        "start": "electron index.js"
+        "start": "electron main.js"
     },
     "license": "MIT",
     "dependencies": {
         "debug": "^2.2.0",
+        "electron-prebuilt-compile": "^1.7.9",
         "extend": "^3.0.0",
-        "electron": "^1.7.9"
+        "lodash": "^4.17.4",
+        "material-ui": "^0.19.4",
+        "nedb": "^1.8.0",
+        "q": "^1.5.1",
+        "react": "^16.1.0",
+        "react-dom": "^16.1.0",
+        "unirest": "^0.5.1"
     }
 }
