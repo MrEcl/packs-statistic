@@ -28,6 +28,22 @@
         <ol id="cards"></ol>
 
         <script>
+            import {cards} from "./controller/hsCard.js";
+
+            Q.fcall(function () {
+                return pack.find({})
+            })
+            .then(function (packs) {
+                _.each(packs, function (pack) {
+                    let id = pack.cards[0].card
+                })
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+        </script>
+
+        <script>
             import {pack} from "./controller/pack.js";
             const unirest = require('unirest');
             const Q = require('q');

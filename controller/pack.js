@@ -9,17 +9,22 @@ const Q = require('q');
 const _ = require('lodash');
 
 let db = new Datastore({ filename: 'db/pack.db', autoload: true });
+// let cardsDB = new Datastore({ filename: 'db/hsCards.db', autoload: true });
 
 exports.pack = {
     create: function (model) {
         let now = new Date();
-        
-        model.createdAt = now;
-        model.updatedAt = now;
+        let cardId = model.cards[0].card;
 
-        db.insert(model, function (err, newDoc) {
-            if (err) console.log(err);
-            console.log(newDoc)
+        hsCard.find({cardId: cardId})
+        .then(function (cards) {
+            model.createdAt = now;
+            model.updatedAt = now;
+            model.cardSet = cards[0].cardSet;
+
+            db.insert(model, function (err, newDoc) {
+                if (err) console.log(err);
+            });
         });
     },
 

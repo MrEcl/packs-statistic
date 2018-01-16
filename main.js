@@ -60,7 +60,7 @@ app.on('ready', () => {
 
     win.loadURL(`file://${__dirname}/index.html`);
 
-    // Menu.setApplicationMenu(menu);
+    //  Menu.setApplicationMenu(menu);
 });
 
 
