@@ -56,9 +56,12 @@
 
             // Listener query
             let buttons = document.getElementsByClassName(menuClass);
+            let content = document.getElementsByClassName('content')[0];
 
             for(let button of buttons) {
                 button.addEventListener("click", function () {
+                    content.scrollTop = 0;
+
                     let list = document.getElementById("cards");
 
                     let title = document.getElementById("title");
@@ -116,6 +119,7 @@
                                     case 'Legendary':
                                         lCounter = 0;
                                         node.className = 'legendary-pack';
+
                                         LegendaryCounter++;
                                         if (card.isGolden) dust += 1600;
                                         else dust += 400;

@@ -121,7 +121,7 @@ body {
     display: inline-block;
 
     margin: 10px 30px; 
-    /* padding: 10px; */
+    padding-bottom: 10px;
 
     background: rgba(0, 37, 51, 0.57);
     border: 1px solid rgba(179, 179, 179, 0.15);
@@ -132,8 +132,8 @@ body {
 
 
 #cards .legendary-pack {
-    border: 1px solid rgba(255, 161, 20, 0.57);
-    background: rgba(119, 77, 15, 0.20);
+    border: 1px solid rgba(167, 133, 83, 0.57);
+    background: rgba(119, 77, 15, 0.15);
     color: rgb(255, 161, 20);
 }
 
@@ -154,7 +154,7 @@ body {
 
 #cards .legendary-pack .head {
     /* color: rgb(255, 161, 20); */
-    border-bottom: 1px solid rgba(255, 161, 20, 0.3);
+    border-bottom: 1px solid rgba(167, 133, 83, 0.57);
     background-color: rgba(175, 106, 20, 0.51);
 }
 
