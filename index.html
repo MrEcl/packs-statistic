@@ -88,7 +88,14 @@
                         let EpicCounter = 0;
                         let LegendaryCounter = 0;
 
-                        if (!packs.length) list.appendChild(document.createTextNode('Nothing 🐾'));
+                        // Placehoder
+                        if (!packs.length) {
+                            let li = document.createElement('li');
+
+                            li.innerHTML = `You don't have ${button.dataset.set} packs`;
+                            li.className = 'placeholder';
+                            list.appendChild(li);
+                        }
 
                         for (let pack of packs) {
                             let date = new Date(pack.createdAt);

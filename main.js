@@ -18,7 +18,7 @@ const LogWatcher = require('./libs/logWatcher.js');
 let icon = nativeImage.createFromPath(`${__dirname}/icon2.png`);
 let menuTemplate = [
     {
-        label: 'Packs',
+        label: 'Packs Statistics',
         submenu: [
             {
                 label: 'Update cards',
@@ -28,17 +28,6 @@ let menuTemplate = [
             }
         ]
     },
-    {
-        label: 'Set sets',
-        submenu: [
-            {
-                label: 'Update packs',
-                click: () => {
-                    updatePacks();
-                }
-            }
-        ]
-    }
 ];
 
 let menu = Menu.buildFromTemplate(menuTemplate);
@@ -97,23 +86,6 @@ function updateCards () {
             });
         });
     });
-}
-
-function updatePacks () {
-    pack.find()
-    .then(function (packs) {
-        _.each(packs, function (packeg) {
-            let update =  {
-                updatedAt: new Date(),
-                cardSet: packeg.cards[0].card.cardSet
-            }
-
-            pack.update({_id: packeg._id}, update);
-        })
-    })
-    .catch(function(err) {
-        console.error(err);
-    })
 }
 
 
