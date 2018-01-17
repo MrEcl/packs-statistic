@@ -21,10 +21,6 @@ exports.pack = {
         });
     },
 
-    update: function () {
-
-    },
-
     find: function (query, cb) {
         const deferred = Q.defer();
 
@@ -35,8 +31,4 @@ exports.pack = {
 
         return deferred.promise;
     },
-
-    destroy: function () {
-
-    }
 }

@@ -69,6 +69,9 @@ app.on('ready', () => {
         minHeight: 620,
         minWidth: 1000,
         backgroundColor: '#000',
+        webPreferences: { 
+            experimentalFeatures: true 
+        }
     });
 
     win.loadURL(`file://${__dirname}/index.html`);
