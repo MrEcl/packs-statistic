@@ -130,7 +130,7 @@
                                         else dust += 100;
                                         break;
                                     case 'Rare':
-                                        RareCounter++
+                                        RareCounter++;
                                         if (card.isGolden) dust += 100;
                                         else dust += 20;
                                         break;
@@ -156,7 +156,7 @@
                             head.appendChild(dustNode)
                             
                             // Append new pack
-                            list.appendChild(node);
+                            list.prepend(node);
                         }
 
                         let statistic = document.getElementById('statistic');
