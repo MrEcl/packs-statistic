@@ -23,6 +23,11 @@
             const Q = require('q');
             const menuClass= "show-cards"
 
+            const toDouble = function (number) {
+                if (number.toString().length < 2) number = '0'+number;
+                return number;
+            }
+
             let sets = [
                 {name: "Classic", tag: 'classic'},
                 // "Goblins vs Gnomes",
@@ -75,7 +80,16 @@
                         if (!packs.length) list.appendChild(document.createTextNode('Nothing 🐾'));
 
                         for (let pack of packs) {
+                            let date = new Date(pack.createdAt);
+                            let dust = 0;
+
                             let node = document.createElement("LI");
+                            let dateNode = document.createElement("span");
+                            let dustNode = document.createElement("span");
+
+                            dateNode.className = 'date';
+                            dateNode.innerHTML = `${date.getMonth()+1}.${date.getDate()}.${date.getFullYear()} ${toDouble(date.getHours())}:${toDouble(date.getMinutes())}`;
+                            node.appendChild(dateNode);
 
                             lCounter++;
 
@@ -83,15 +97,41 @@
 
                             for (let card of pack.cards) {
                                 let img = document.createElement('img');
+                                let rarity = card.card.rarity;
+
+                                switch (rarity) {
+                                    case 'Legendary':
+                                        lCounter = 0;
+                                        node.className = 'legendary-pack';
+                                        if (card.isGolden) dust += 1600;
+                                        else dust += 400;
+                                        break; 
+                                    case 'Epic':
+                                        if (card.isGolden) dust += 400;
+                                        else dust += 100;
+                                        break;
+                                    case 'Rare':
+                                        if (card.isGolden) dust += 100;
+                                        else dust += 20;
+                                        break;
+                                    case 'Common':
+                                        if (card.isGolden) dust += 50;
+                                        else dust += 5;
+                                        break;
+                                }
+
                                 img.src = card.isGolden ? card.card.imgGold : card.card.img;
 
                                 img.style.width = '130px';
                                 img.alt = card.card.name;
 
-                                if (card.card.rarity == "Legendary") lCounter = 0;
-
                                 node.appendChild(img); 
                             }
+
+                            dustNode.className = 'pack-dust';
+                            dustNode.innerHTML = `${dust} dust`;
+
+                            node.appendChild(dustNode);
                             
                             // Append new pack
                             list.appendChild(node);

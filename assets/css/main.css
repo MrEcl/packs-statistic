@@ -21,19 +21,18 @@ body {
 
     height: 63px;
     width: 100%;
-
-    text-align: center;
+    
     padding: 20px;
+
     font-size: 20px;
+    text-align: center;
 
-    border-bottom: 1px solid rgba(179, 179, 179, 0.15);
-
-    overflow: hidden;
-
-    box-sizing: border-box;
-
-    backdrop-filter: blur(10px);
     transform: translate(0, 0, 0);
+    border-bottom: 1px solid rgba(179, 179, 179, 0.15);
+    backdrop-filter: blur(10px);
+    
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .aside {
@@ -94,19 +93,41 @@ body {
 
 .content {
     display: block;
-    margin: 64px 0 0 70px;
-    
     max-height: calc(100% - 64px);
+    margin: 64px 0 0 70px;
     overflow: auto;
 }
 
 #cards li {
+    position: relative;
     display: inline-block;
-    padding: 10px;
-    background: rgba(0, 37, 51, 0.57);
-    box-shadow: 1px 2px 7px rgba(0, 0, 0, 0.93);
-    margin: 10px 30px; 
-    border: 1px solid rgba(179, 179, 179, 0.15);
 
-    color: #666
+    margin: 10px 30px; 
+    padding: 10px;
+
+    background: rgba(0, 37, 51, 0.57);
+    border: 1px solid rgba(179, 179, 179, 0.15);
+    box-shadow: 1px 2px 7px rgba(0, 0, 0, 0.93);
+
+    color: #666;
+}
+
+#cards .legendary-pack {
+    border: 1px solid rgba(255, 161, 20, 0.5);
+    background: rgba(119, 77, 15, 0.57);
+    color: rgb(255, 161, 20);
+}
+
+#cards .date {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 10px;
+}
+
+#cards .pack-dust {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 13px;
 }
