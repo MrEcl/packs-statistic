@@ -27,6 +27,17 @@ let menuTemplate = [
                 }
             }
         ]
+    },
+    {
+        label: 'Set sets',
+        submenu: [
+            {
+                label: 'Update packs',
+                click: () => {
+                    updatePacks();
+                }
+            }
+        ]
     }
 ];
 
@@ -53,14 +64,16 @@ app.setName('Pack Statistics')
 // Program inited and ready to run
 app.on('ready', () => {
     let win = new BrowserWindow({
-        width: 800, 
-        height: 600,
-        backgroundColor: '#313131',
+        width: 1180, 
+        height: 620,
+        minHeight: 620,
+        minWidth: 1000,
+        backgroundColor: '#000',
     });
 
     win.loadURL(`file://${__dirname}/index.html`);
 
-    //  Menu.setApplicationMenu(menu);
+    // Menu.setApplicationMenu(menu);
 });
 
 
@@ -81,6 +94,23 @@ function updateCards () {
             });
         });
     });
+}
+
+function updatePacks () {
+    pack.find()
+    .then(function (packs) {
+        _.each(packs, function (packeg) {
+            let update =  {
+                updatedAt: new Date(),
+                cardSet: packeg.cards[0].card.cardSet
+            }
+
+            pack.update({_id: packeg._id}, update);
+        })
+    })
+    .catch(function(err) {
+        console.error(err);
+    })
 }
 
 

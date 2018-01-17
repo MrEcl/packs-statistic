@@ -28,8 +28,14 @@ exports.pack = {
         });
     },
 
-    update: function () {
-
+    update: function (identifier, update) {
+        console.log(update)
+        db.update(identifier, {$set: update}, { multi: true }, function (err, numReplaced) {
+            console.log(update)
+            if (err) console.log(err);
+            console.log(numReplaced)
+            // numReplaced = 3
+        });
     },
 
     find: function (query, cb) {

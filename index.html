@@ -4,83 +4,104 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Hearthstone Packs Statistics</title>
-
-        <style>
-            body {
-                background: rgb(31, 31, 31);
-                color: #fff;
-                font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
-            }
-
-            h1 {
-                margin-top: 100px;
-                font-weight: 300;
-                text-align: center;
-                color: rgb(255, 255, 255);
-            }
-        </style>
+        <link rel="stylesheet" href="assets/css/main.css">
     </head>
     <body id="app">
-        <h1>The window :)</h1>
+        <div id="heading" class="heading">Hearthstone Packs</div>
 
-        <button id="show-cards">Show my packs</button>
+        <div id="packs" class="aside"></div>
 
-        <ol id="cards"></ol>
-
-        <script>
-            import {cards} from "./controller/hsCard.js";
-
-            Q.fcall(function () {
-                return pack.find({})
-            })
-            .then(function (packs) {
-                _.each(packs, function (pack) {
-                    let id = pack.cards[0].card
-                })
-            })
-            .catch(function (err) {
-                console.log(err);
-            });
-        </script>
+        <div class="content">
+            <ol id="cards"></ol>
+        </div>
+        
 
         <script>
             import {pack} from "./controller/pack.js";
+
             const unirest = require('unirest');
             const Q = require('q');
+            const menuClass= "show-cards"
 
-            document.getElementById("show-cards")
-            .addEventListener("click", function () {
-                let list = document.getElementById("cards");
+            let sets = [
+                {name: "Classic", tag: 'classic'},
+                // "Goblins vs Gnomes",
+                // "The Grand Tournament",
+                {name: "Whispers of the Old Gods", tag: 'wog'},
+                {name: "Mean Streets of Gadgetzan", tag: 'msg'},
+                {name: "Journey to Un'Goro", tag: 'ju'},
+                {name: "Knights of the Frozen Throne", tag: 'koft'},
+                {name: "Kobolds & Catacombs", tag: 'kc'}
+            ];
 
-                Q.fcall(function () {
-                    return pack.find({})
-                })
-                .then(function (packs) {
+            let menu = document.getElementById("packs");
 
-                    // Clear list
-                    list.innerHTML = "";
+            for (let set of sets) {
+                let button = document.createElement('button');
 
-                    for (let pack of packs) {
-                        let node = document.createElement("LI");
+                button.dataset.set = set.name;
+                button.className = `${menuClass} ${set.tag}`;
 
-                        for (let card of pack.cards) {
-                            let img = document.createElement('img');
-                            img.src = card.isGolden ? card.card.imgGold : card.card.img;
+                menu.appendChild(button); 
+            }
 
-                            img.style.width = '130px';
-                            img.alt = card.card.name;
 
-                            node.appendChild(img); 
-                        }
-                        
-                        // Append new pack
-                        list.appendChild(node);
+            // Listener query
+            let buttons = document.getElementsByClassName(menuClass);
+
+            for(let button of buttons) {
+                button.addEventListener("click", function () {
+                    let list = document.getElementById("cards");
+
+                    let heading = document.getElementById("heading")
+                    heading.innerHTML =button.dataset.set;
+
+                    for (let but of buttons) {
+                        but.classList.remove('active');
                     }
-                })
-                .catch(function (err) {
-                    console.log(err);
-                })
-            });
+
+                    button.className += ' active'
+
+                    Q.fcall(function () {
+                        return pack.find({cardSet: button.dataset.set})
+                    })
+                    .then(function (packs) {
+
+                        // Clear list
+                        list.innerHTML = "";
+
+                        let lCounter = 0;
+
+                        if (!packs.length) list.appendChild(document.createTextNode('Nothing 🐾'));
+
+                        for (let pack of packs) {
+                            let node = document.createElement("LI");
+
+                            lCounter++;
+
+                            node.appendChild(document.createTextNode(lCounter+'.'));
+
+                            for (let card of pack.cards) {
+                                let img = document.createElement('img');
+                                img.src = card.isGolden ? card.card.imgGold : card.card.img;
+
+                                img.style.width = '130px';
+                                img.alt = card.card.name;
+
+                                if (card.card.rarity == "Legendary") lCounter = 0;
+
+                                node.appendChild(img); 
+                            }
+                            
+                            // Append new pack
+                            list.appendChild(node);
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+                });
+            }
         </script>
 
         <script src="index.js"></script>
