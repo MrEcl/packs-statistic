@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background: #000506;
     color: #fff;
@@ -22,10 +26,10 @@ body {
     height: 63px;
     width: 100%;
     
-    padding: 20px;
+    padding: 20px 30px;
 
     font-size: 20px;
-    text-align: center;
+    /* text-align: center; */
 
     transform: translate(0, 0, 0);
     border-bottom: 1px solid rgba(179, 179, 179, 0.15);
@@ -33,6 +37,20 @@ body {
     
     overflow: hidden;
     box-sizing: border-box;
+}
+
+#title {display: inline-block;}
+
+#statistic {
+    float: right;
+    display: inline-block;
+    font-size: 14px;
+    margin-left: 40px;
+}
+
+#statistic span {
+    font-size: 12px;
+    color: rgb(172, 172, 172);
 }
 
 .aside {
@@ -103,7 +121,7 @@ body {
     display: inline-block;
 
     margin: 10px 30px; 
-    padding: 10px;
+    /* padding: 10px; */
 
     background: rgba(0, 37, 51, 0.57);
     border: 1px solid rgba(179, 179, 179, 0.15);
@@ -112,22 +130,63 @@ body {
     color: #666;
 }
 
+
 #cards .legendary-pack {
-    border: 1px solid rgba(255, 161, 20, 0.5);
-    background: rgba(119, 77, 15, 0.57);
+    border: 1px solid rgba(255, 161, 20, 0.57);
+    background: rgba(119, 77, 15, 0.20);
     color: rgb(255, 161, 20);
+}
+
+#cards .head { 
+    position: relative;
+    height: 50px;
+    width: 100%;
+
+    padding: 11px 20px;
+
+    background-color: rgba(40, 72, 105, 0.23);
+    border-bottom: 1px solid rgba(179, 179, 179, 0.15);
+
+    color: #fff;
+    font-size: 22px;
+    text-shadow: 1px 1px 1px #000;
+}
+
+#cards .legendary-pack .head {
+    /* color: rgb(255, 161, 20); */
+    border-bottom: 1px solid rgba(255, 161, 20, 0.3);
+    background-color: rgba(175, 106, 20, 0.51);
 }
 
 #cards .date {
     position: absolute;
     top: 10px;
-    left: 10px;
+    right: 10px;
     font-size: 10px;
+    color: #666;
+    text-shadow: none;
 }
 
+#cards .legendary-pack .date {color: rgb(196, 196, 196);}
+#cards .legendary-pack .pack-dust {color: #eee;}
+
 #cards .pack-dust {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 13px;
+    margin-left: 15px;
+    font-size: 17px;
+    color: #bfbfbf;
+    text-shadow: none;
+}
+
+#cards .pack-dust:after {
+    content: '';
+    
+    display: inline-block;
+    width: 11px;
+    height: 16px;
+
+    margin-left: 4px;
+    margin-bottom: -1px;
+
+    background-image: url('../images/icon-dust.png');
+    background-repeat: no-repeat; 
 }

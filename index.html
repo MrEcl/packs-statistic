@@ -7,7 +7,10 @@
         <link rel="stylesheet" href="assets/css/main.css">
     </head>
     <body id="app">
-        <div id="heading" class="heading">Hearthstone Packs</div>
+        <div id="heading" class="heading">
+            <div id="title">Hearthstone Packs</div>
+            <div id="statistic"></div>
+        </div>
 
         <div id="packs" class="aside"></div>
 
@@ -58,8 +61,8 @@
                 button.addEventListener("click", function () {
                     let list = document.getElementById("cards");
 
-                    let heading = document.getElementById("heading")
-                    heading.innerHTML =button.dataset.set;
+                    let title = document.getElementById("title");
+                    title.innerHTML = button.dataset.set;
 
                     for (let but of buttons) {
                         but.classList.remove('active');
@@ -77,23 +80,33 @@
 
                         let lCounter = 0;
 
+                        let CommonCounter = 0;
+                        let RareCounter = 0;
+                        let EpicCounter = 0;
+                        let LegendaryCounter = 0;
+
                         if (!packs.length) list.appendChild(document.createTextNode('Nothing 🐾'));
 
                         for (let pack of packs) {
                             let date = new Date(pack.createdAt);
                             let dust = 0;
 
-                            let node = document.createElement("LI");
+                            let node = document.createElement("li");
                             let dateNode = document.createElement("span");
                             let dustNode = document.createElement("span");
 
+                            // Head generator
+                            let head = document.createElement("div");
+                            head.className = 'head';
+
                             dateNode.className = 'date';
                             dateNode.innerHTML = `${date.getMonth()+1}.${date.getDate()}.${date.getFullYear()} ${toDouble(date.getHours())}:${toDouble(date.getMinutes())}`;
-                            node.appendChild(dateNode);
+                            head.appendChild(dateNode);
 
                             lCounter++;
 
-                            node.appendChild(document.createTextNode(lCounter+'.'));
+                            node.appendChild(head);
+                            head.appendChild(document.createTextNode(lCounter));
 
                             for (let card of pack.cards) {
                                 let img = document.createElement('img');
@@ -103,18 +116,22 @@
                                     case 'Legendary':
                                         lCounter = 0;
                                         node.className = 'legendary-pack';
+                                        LegendaryCounter++;
                                         if (card.isGolden) dust += 1600;
                                         else dust += 400;
                                         break; 
                                     case 'Epic':
+                                        EpicCounter++;
                                         if (card.isGolden) dust += 400;
                                         else dust += 100;
                                         break;
                                     case 'Rare':
+                                        RareCounter++
                                         if (card.isGolden) dust += 100;
                                         else dust += 20;
                                         break;
                                     case 'Common':
+                                        CommonCounter++;
                                         if (card.isGolden) dust += 50;
                                         else dust += 5;
                                         break;
@@ -128,14 +145,18 @@
                                 node.appendChild(img); 
                             }
 
-                            dustNode.className = 'pack-dust';
-                            dustNode.innerHTML = `${dust} dust`;
 
-                            node.appendChild(dustNode);
+                            dustNode.className = 'pack-dust';
+                            dustNode.innerHTML = dust;
+
+                            head.appendChild(dustNode)
                             
                             // Append new pack
                             list.appendChild(node);
                         }
+
+                        let statistic = document.getElementById('statistic');
+                        statistic.innerHTML = `Packs: ${packs.length} <span>(Common: ${CommonCounter}, Rare: ${RareCounter}, Epic: ${EpicCounter}, Legendary: ${LegendaryCounter})</span>`
                     })
                     .catch(function (err) {
                         console.log(err);
