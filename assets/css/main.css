@@ -132,8 +132,8 @@ body {
 
 
 #cards .legendary-pack {
-    border: 1px solid rgba(167, 133, 83, 0.57);
-    background: rgba(119, 77, 15, 0.15);
+    border: 1px solid rgba(167, 133, 83, 0.15);
+    background: rgba(119, 77, 15, 0.57);
     color: rgb(255, 161, 20);
 }
 
@@ -153,9 +153,8 @@ body {
 }
 
 #cards .legendary-pack .head {
-    /* color: rgb(255, 161, 20); */
-    border-bottom: 1px solid rgba(167, 133, 83, 0.57);
-    background-color: rgba(175, 106, 20, 0.51);
+    border-bottom: 1px solid rgba(167, 133, 83, 0.15);
+    background-color: rgba(175, 106, 20, 0.23);
 }
 
 #cards .date {
