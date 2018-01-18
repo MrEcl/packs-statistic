@@ -1,0 +1,75 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Updating cards</title>
+        <link rel="stylesheet" href="assets/css/main.css">
+    </head>
+    <body id="modal">
+        <div class="progress">
+            <div id="bar" class="bar"></div>
+        </div>
+
+        <script>
+            import {hsCard} from './controller/hsCard.js'
+
+            const remote = require('electron').remote;
+            const unirest = require('unirest');
+            const path = require('path');
+            const fs = require('fs');
+            const _ = require('lodash');
+
+            const thisWindow = remote.getCurrentWindow();
+
+            const update = function () {
+                unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards?locale=enUS")
+                .header("X-Mashape-Key", "2Trvllmn29mshf9ObTI6V4WbDwaWp1oQtLHjsnDn5ZXx7AAtaR")
+                .end(function (result) {
+                    if (result.status != 200) return false;
+
+                    let length = 0;
+                    let i = 0;
+
+                    _.each(result.body, cards => {
+                        length += cards.length;
+                    });
+
+                    _.each(result.body, cards => {
+                        _.each(cards, card => {
+                            hsCard.create(card, function () {
+                                let percent = 100/length*i;
+                                i++;
+
+                                bar.style.width = `${percent}%`;
+
+                                if (i >= length) {
+                                    thisWindow.setClosable(true)
+                                    thisWindow.close();
+                                }
+                            });
+                        });
+                    });
+                });
+            }
+            
+            let bar = document.getElementById('bar');
+            let dbPath = path.join('db', 'hsCard.db');
+
+            fs.stat(dbPath, function (err, stats) {
+                if (err || !stats) {
+                    return update();
+                }
+
+                if (stats.isFile()) {
+                    fs.unlink(dbPath, function (err) {
+                        if (err) return console.log(err);
+                        update();
+                    });
+                } else {
+                    update();
+                }
+            });
+        </script>
+    </body>
+</html>

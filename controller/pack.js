@@ -7,6 +7,7 @@ import {hsCard} from './hsCard.js';
 const Datastore = require('nedb');
 const Q = require('q');
 const _ = require('lodash');
+// const EventEmitter = require('events');
 
 let db = new Datastore({ filename: 'db/pack.db', autoload: true });
 // let cardsDB = new Datastore({ filename: 'db/hsCards.db', autoload: true });
@@ -23,6 +24,7 @@ exports.pack = {
             model.cardSet = cards[0].cardSet;
 
             db.insert(model, function (err, newDoc) {
+                // pack.emit('created', newDoc);
                 if (err) console.log(err);
             });
         });

@@ -20,8 +20,7 @@
         
 
         <script>
-            import {pack} from "./controller/pack.js";
-
+            const pack = require("./controller/pack.js").pack;
             const unirest = require('unirest');
             const Q = require('q');
             const menuClass= "show-cards"
@@ -58,13 +57,20 @@
             let buttons = document.getElementsByClassName(menuClass);
             let content = document.getElementsByClassName('content')[0];
 
-            for(let button of buttons) {
+            for (let button of buttons) {
                 button.addEventListener("click", function () {
+                    // Prevent second click
+                    if (button.className.indexOf('active') >= 0) return true;
+
                     content.scrollTop = 0;
 
                     let list = document.getElementById("cards");
-
                     let title = document.getElementById("title");
+
+                    
+                    list.innerHTML = "";
+                    list.className = 'preload'
+
                     title.innerHTML = button.dataset.set;
 
                     for (let but of buttons) {
@@ -77,12 +83,7 @@
                         return pack.find({cardSet: button.dataset.set})
                     })
                     .then(function (packs) {
-
-                        // Clear list
-                        list.innerHTML = "";
-
                         let lCounter = 0;
-
                         let CommonCounter = 0;
                         let RareCounter = 0;
                         let EpicCounter = 0;
@@ -123,6 +124,21 @@
                                 let rarity = card.card.rarity;
 
                                 switch (rarity) {
+                                    case 'Common':
+                                        CommonCounter++;
+                                        if (card.isGolden) dust += 50;
+                                        else dust += 5;
+                                        break;
+                                    case 'Rare':
+                                        RareCounter++;
+                                        if (card.isGolden) dust += 100;
+                                        else dust += 20;
+                                        break;
+                                    case 'Epic':
+                                        EpicCounter++;
+                                        if (card.isGolden) dust += 400;
+                                        else dust += 100;
+                                        break;
                                     case 'Legendary':
                                         lCounter = 0;
                                         node.className = 'legendary-pack';
@@ -130,21 +146,6 @@
                                         LegendaryCounter++;
                                         if (card.isGolden) dust += 1600;
                                         else dust += 400;
-                                        break; 
-                                    case 'Epic':
-                                        EpicCounter++;
-                                        if (card.isGolden) dust += 400;
-                                        else dust += 100;
-                                        break;
-                                    case 'Rare':
-                                        RareCounter++;
-                                        if (card.isGolden) dust += 100;
-                                        else dust += 20;
-                                        break;
-                                    case 'Common':
-                                        CommonCounter++;
-                                        if (card.isGolden) dust += 50;
-                                        else dust += 5;
                                         break;
                                 }
 
@@ -168,6 +169,8 @@
 
                         let statistic = document.getElementById('statistic');
                         statistic.innerHTML = `Packs: ${packs.length} <span>(Common: ${CommonCounter}, Rare: ${RareCounter}, Epic: ${EpicCounter}, Legendary: ${LegendaryCounter})</span>`
+                        
+                        list.className = '';
                     })
                     .catch(function (err) {
                         console.log(err);

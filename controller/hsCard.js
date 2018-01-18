@@ -9,7 +9,7 @@ const Q = require('q');
 let db = new Datastore({ filename: 'db/hsCard.db', autoload: true });
 
 exports.hsCard = {
-    create: function (model) {
+    create: function (model, cb) {
         let now = new Date();
 
         model.createdAt = now;
@@ -17,7 +17,8 @@ exports.hsCard = {
 
         db.insert(model, function (err, newDoc) {
             if (err) console.log(err);
-            console.log(newDoc)
+            //console.log(newDoc)
+            return cb()
         });
     },
 

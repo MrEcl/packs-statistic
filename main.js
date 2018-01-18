@@ -4,6 +4,7 @@ import {card} from "./controller/card.js";
 import {pack} from "./controller/pack.js";
 import {hsCard} from './controller/hsCard.js'
 import {settings} from './controller/settings.js'
+import { setTimeout } from 'timers';
 
 const electron = require('electron');
 const {app, BrowserWindow, Menu} = electron;
@@ -33,26 +34,16 @@ let menuTemplate = [
 let menu = Menu.buildFromTemplate(menuTemplate);
 let programSettings = {};
 
+// Main window
+let win;
+
+
 app.dock.setIcon(icon);
 app.setName('Pack Statistics')
 
-
-// Init program settings
-// Q.fcall(function () {
-//     return settings.find({});
-// })
-// .then(function (savedSettings) {
-//     if (!savedSettings.length) return firstRun();
-
-//     settings = savedSettings[0];
-// })
-// .catch(function (err) {
-//     return console.log(err);
-// });
-
 // Program inited and ready to run
 app.on('ready', () => {
-    let win = new BrowserWindow({
+    win = new BrowserWindow({
         width: 1180, 
         height: 620,
         minHeight: 620,
@@ -65,26 +56,32 @@ app.on('ready', () => {
 
     win.loadURL(`file://${__dirname}/index.html`);
 
-    // Menu.setApplicationMenu(menu);
+    Menu.setApplicationMenu(menu);
 });
-
-
 
 function updateCards () {
     const unirest = require('unirest');
+    const path = require('path')
 
-    unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards?locale=enUS")
-    .header("X-Mashape-Key", "2Trvllmn29mshf9ObTI6V4WbDwaWp1oQtLHjsnDn5ZXx7AAtaR")
-    .end(function (result) {
-        if (result.status != 200) return false;
+    let child = new BrowserWindow({
+        parent: win, 
 
-        console.log('Status: ok. Let`s create!');
+        alwaysOnTop: true,
+        closable: false,
+        minimizable: false,
+        resizable: false,
 
-        _.each(result.body, cards => {
-            _.each(cards, card => {
-                hsCard.create(card);
-            });
-        });
+        title: 'Updating cards',
+        show: true,
+        width: 300, 
+        height: 100,
+        backgroundColor: '#121a27'
+    });
+
+    child.loadURL(`file://${__dirname}/uploadcards.html`);
+
+    child.once('ready-to-show', () => {
+        win.child()
     });
 }
 
