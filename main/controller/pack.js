@@ -3,16 +3,19 @@
  */
 
 import {hsCard} from './hsCard.js';
+import {updateData} from './settings.js';
 
 const Datastore = require('nedb');
 const Q = require('q');
 const _ = require('lodash');
-// const EventEmitter = require('events');
+const {ipcMain} = require('electron');
+
+// Event to notify on pack changes
+let subscriber; 
 
 let db = new Datastore({ filename: 'db/pack.db', autoload: true });
-// let cardsDB = new Datastore({ filename: 'db/hsCards.db', autoload: true });
 
-exports.pack = {
+const pack = {
     create: function (model) {
         let now = new Date();
         let cardId = model.cards[0].card;
@@ -24,8 +27,20 @@ exports.pack = {
             model.cardSet = cards[0].cardSet;
 
             db.insert(model, function (err, newDoc) {
-                // pack.emit('created', newDoc);
-                if (err) console.log(err);
+                if (err) return console.log(err);
+
+                // when pack created:
+                // check for set existance
+                // if no set - create it
+                // update settings
+
+                console.log(newDoc);
+
+                if (subscriber) {
+                    subscriber.sender.send('new-pack', newDoc)
+                };
+
+                return newDoc;
             });
         });
     },
@@ -57,6 +72,10 @@ exports.pack = {
 
             Q.all(populate)
             .spread(function (...cards) {
+                if (subscriber) {
+                    subscriber.sender.send('new-pack', 'pong')
+                };
+
                 return deferred.resolve(packs);
             })
             .catch(function (err) {
@@ -66,8 +85,32 @@ exports.pack = {
 
         return deferred.promise;
     },
+};
 
-    destroy: function () {
+exports.pack = pack;
 
-    }
-}
+exports.packController = function () {
+    ipcMain.on('get-set', (event, set) => {
+        Q.fcall(function () {
+            return pack.find({cardSet: set});
+        })
+        .then(function (packs) {
+            let dataToUpdate = {
+                sets: {}
+            };
+
+            dataToUpdate.sets[set] = {};
+            dataToUpdate.sets[set].count = packs.length;
+            updateData(dataToUpdate);
+
+            event.sender.send('res-set', packs, set);
+        })
+        .catch(function (err) {
+            console.log(err);
+        });
+    });
+
+    ipcMain.on('pack-subscribe', (event, set) => {
+        subscriber = event;
+    });
+};

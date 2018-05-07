@@ -5,7 +5,7 @@
     "main": "index.js",
     "author": "MrStyx <gridxeclipse@gmail.com>",
     "scripts": {
-        "start": "electron main.js"
+        "start": "electron main/main.js"
     },
     "license": "MIT",
     "dependencies": {

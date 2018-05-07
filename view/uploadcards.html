@@ -4,7 +4,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Updating cards</title>
-        <link rel="stylesheet" href="assets/css/main.css">
+        <link rel="stylesheet" href="../assets/css/main.css">
     </head>
     <body id="modal">
         <div class="progress">
@@ -12,7 +12,7 @@
         </div>
 
         <script>
-            import {hsCard} from './controller/hsCard.js'
+            import {hsCard} from '../main/controller/hsCard.js'
 
             const remote = require('electron').remote;
             const unirest = require('unirest');
@@ -54,7 +54,7 @@
             }
             
             let bar = document.getElementById('bar');
-            let dbPath = path.join('db', 'hsCard.db');
+            let dbPath = path.join('..', 'db', 'hsCard.db');
 
             fs.stat(dbPath, function (err, stats) {
                 if (err || !stats) {

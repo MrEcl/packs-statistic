@@ -1,10 +1,7 @@
 import { platform } from 'os';
 
-import {card} from "./controller/card.js";
-import {pack} from "./controller/pack.js";
-import {hsCard} from './controller/hsCard.js'
-import {settings} from './controller/settings.js'
-import { setTimeout } from 'timers';
+import {pack, packController} from "./controller/pack.js";
+import {userController} from './controller/settings.js';
 
 const electron = require('electron');
 const {app, BrowserWindow, Menu} = electron;
@@ -15,8 +12,7 @@ const Q = require('q');
 const fs = require('fs');
 const LogWatcher = require('./libs/logWatcher.js');
 
-
-let icon = nativeImage.createFromPath(`${__dirname}/icon2.png`);
+let icon = nativeImage.createFromPath(`${__dirname + '/..'}/icon2.png`);
 let menuTemplate = [
     {
         label: 'Packs Statistics',
@@ -26,9 +22,23 @@ let menuTemplate = [
                 click: () => {
                     updateCards();
                 }
+            },
+            {
+                label: 'Information'
             }
         ]
     },
+    {
+        label: 'Settings',
+        submenu: [
+            {
+                label: 'Change game location',
+                click: () => {
+                    getLocation();
+                }
+            }
+        ]
+    }
 ];
 
 let menu = Menu.buildFromTemplate(menuTemplate);
@@ -54,7 +64,7 @@ app.on('ready', () => {
         }
     });
 
-    win.loadURL(`file://${__dirname}/index.html`);
+    win.loadURL(`file://${__dirname + '/..'}/view/index.html`);
 
     Menu.setApplicationMenu(menu);
 });
@@ -78,11 +88,15 @@ function updateCards () {
         backgroundColor: '#121a27'
     });
 
-    child.loadURL(`file://${__dirname}/uploadcards.html`);
+    child.loadURL(`file://${__dirname + '/..'}/view/uploadcards.html`);
 
     child.once('ready-to-show', () => {
         win.child()
     });
+};
+
+function getLocation () {
+    console.log('hello windows');
 }
 
 
@@ -111,13 +125,13 @@ lw.on('card-gained', (data) => {
         cardCounter++;
     } else {
         console.log('This is gift card. I wont count this one');
-        card.create(card);
+        //card.create(card);
     }
 
     // Close boster opening and set counter back to zero;
     if (cardCounter == 5) {
-        pack.create(newPack);
-
+        pack.create(newPack)
+        
         openingPack = false;
         cardCounter = 0;
         newPack = {cards: []};
@@ -131,3 +145,8 @@ lw.on('open-booster',  () => {
 
 // Start watching logs
 lw.start();
+
+
+//Load controllers
+packController();
+userController();
