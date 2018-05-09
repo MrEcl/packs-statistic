@@ -58,6 +58,19 @@ const pack = {
             model.pityTimer    = ++sets[model.cardSet].pityTimer;
             // model.sandBox      = true;
 
+            // define new cards set
+            if (!sets[pack.cardSet]) {
+                sets[pack.cardSet] = {
+                    quantity: 0,
+                    common: 0,
+                    rare: 0,
+                    epic: 0,
+                    legendary: 0,
+                    dust: 0,
+                    pityTimer: 0
+                };
+            }
+
             sets[model.cardSet].quantity++;
 
             _.each(model.cards, function (card) {
@@ -93,8 +106,9 @@ const pack = {
                     card: pCard,
                     isGolden: card.isGolden
                 });
-
             });
+
+            sets[model.cardSet].dust += model.dust;
 
             if (model.hasLegendary) sets[model.cardSet].pityTimer = 0;
 
@@ -214,6 +228,7 @@ const pack = {
                             rare: 0,
                             epic: 0,
                             legendary: 0,
+                            dust: 0,
                             pityTimer: 0
                         };
                     }
@@ -258,6 +273,8 @@ const pack = {
 
                     update.hasLegendary = hasLegendary;
                     update.dust = dust;
+
+                    sets[pack.cardSet].dust += dust;
 
                     query.push(
                         db.update({"_id": pack._id}, {$set: update}, { multi: false }, function (err, numReplaced) {

@@ -77,7 +77,7 @@ class Title extends React.Component {
         if (set) {
             return (
                 <div id="statistic">
-                    {`Packs: ${set.quantity} `}<span>{`(Common: ${set.common}, Rare: ${set.rare}, Epic: ${set.epic}, Legendary: ${set.legendary})`}</span>
+                    {`Packs: ${set.quantity} `}<span>{`(Common: ${set.common}, Rare: ${set.rare}, Epic: ${set.epic}, Legendary: ${set.legendary}, Dust in total: ${set.dust})`}</span>
                 </div>
             )
         } else {
