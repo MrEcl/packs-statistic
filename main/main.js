@@ -29,6 +29,20 @@ let menuTemplate = [
         ]
     },
     {
+        label: 'View',
+        submenu: [
+            {role: 'reload'},
+            {role: 'forcereload'},
+            {role: 'toggledevtools'},
+            {type: 'separator'},
+            {role: 'resetzoom'},
+            {role: 'zoomin'},
+            {role: 'zoomout'},
+            {type: 'separator'},
+            {role: 'togglefullscreen'}
+        ]
+    },
+    {
         label: 'Settings',
         submenu: [
             {
@@ -36,7 +50,42 @@ let menuTemplate = [
                 click: () => {
                     getLocation();
                 }
-            }
+            },
+            {
+                label: 'Rebuild packs',
+                click: () => {
+                    rebuildPacks();
+                }
+            },
+            // {
+            //     label: 'Sendbox create new pack',
+            //     click: () => {
+            //         pack.createNew({
+            //             cards: [
+            //                 {
+            //                     card: 'CS2_231',
+            //                     isGolden: true
+            //                 },
+            //                 {
+            //                     card: 'EX1_562',
+            //                     isGolden: false
+            //                 },
+            //                 {
+            //                     card: 'CS2_231',
+            //                     isGolden: false
+            //                 },
+            //                 {
+            //                     card: 'CS2_231',
+            //                     isGolden: false
+            //                 },
+            //                 {
+            //                     card: 'CS2_231',
+            //                     isGolden: false
+            //                 }
+            //             ]
+            //         });
+            //     }
+            // }
         ]
     }
 ];
@@ -99,6 +148,14 @@ function getLocation () {
     console.log('hello windows');
 }
 
+function rebuildPacks () {
+    pack.rebuild();
+}
+
+function globalPlay () {
+    global.settings.sets.Classic.quantity++;
+}
+
 
 /****************************************************************************
  * Card gaining logic
@@ -149,4 +206,4 @@ lw.start();
 
 //Load controllers
 packController();
-userController();
+userController(global);

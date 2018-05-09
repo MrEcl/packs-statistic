@@ -27,15 +27,18 @@ let subscriber;
 
 const settings = {
     create: function (model) {
+        const deferred = Q.defer();
         let now = new Date();
         
         model.createdAt = now;
         model.updatedAt = now;
 
         db.insert(model, function (err, newDoc) {
-            if (err) console.log(err);
-            console.log(newDoc)
+            if (err) deferred.reject(err)
+            deferred.resolve(newDoc)
         });
+
+        return deferred.promise;
     },
 
     find: function (query, cb) {
@@ -51,9 +54,10 @@ const settings = {
 
     init: function () {
         const self = this;
+        const deferred = Q.defer();
 
         Q.fcall(function () {
-            return self.find()
+            return self.find({})
         })
         .then(function (settings) {
             if (!settings[0]) return self.create({});
@@ -61,27 +65,35 @@ const settings = {
             return settings[0];
         })
         .then(function (setting) {
-            
+            deferred.resolve(setting)
         })
         .catch(function (err) {
             throw err;
-        })
+            deferred.reject(err)
+        });
+
+        return deferred.promise;
     }
 }
 
+exports.settings = Q.fcall(function() {return settings.find()});
+
 exports.updateData = function (update) {
     Q.fcall(function () {
-        return settings.find();
+        return settings.find({});
     })
     .then(function (settings) {
         let data = settings[0];
 
-        console.log(data);
         update.updatedAt = new Date();
 
         db.update({"_id": data._id}, {$set: update}, { multi: false }, function (err, numReplaced) {
             if (err) console.log(err);
 
+            // Change global settings
+            global.settings = _.defaultsDeep(update, data);
+
+            // Notify about global settings changes
             if (subscriber) {
                 subscriber.sender.send('data-updated', data);
             };
@@ -92,8 +104,16 @@ exports.updateData = function (update) {
     });
 }
 
-exports.userController = function () {
-    settings.init();
+exports.userController = function (global) {
+    Q.fcall(function() {
+        return settings.init();
+    })
+    .then(function(result) {
+        global.settings = result;
+    })
+    .catch(function (err) {
+        console.log(err);
+    })
 
     // Subs
     ipcMain.on('data-subscribe', (event) => {

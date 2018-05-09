@@ -54,7 +54,7 @@
             }
             
             let bar = document.getElementById('bar');
-            let dbPath = path.join('..', 'db', 'hsCard.db');
+            let dbPath = path.join(__dirname, '../db/hsCard.db');
 
             fs.stat(dbPath, function (err, stats) {
                 if (err || !stats) {
