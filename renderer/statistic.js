@@ -93,10 +93,10 @@ class Menu extends React.Component {
 
         this.sets = [
             {name: "Classic", tag: 'classic'},
-            // "Goblins vs Gnomes",
-            // "The Grand Tournament",
-            //{name: "Whispers of the Old Gods", tag: 'wog'},
-            //{name: "Mean Streets of Gadgetzan", tag: 'msg'},
+            {name: "Goblins vs Gnomes", tag: 'gvg'},
+            {name: "The Grand Tournament", tag: 'tgt'},
+            {name: "Whispers of the Old Gods", tag: 'wog'},
+            {name: "Mean Streets of Gadgetzan", tag: 'msg'},
             {name: "Journey to Un'Goro", tag: 'jtu'},
             {name: "Knights of the Frozen Throne", tag: 'kft'},
             {name: "Kobolds & Catacombs", tag: 'kc'},
@@ -105,7 +105,8 @@ class Menu extends React.Component {
     }
 
     render() {
-        let buttons = this.sets.map(set => {
+        let userSets = this.sets.filter(set => this.props.avalibleSets.indexOf(set.name) >= 0);
+        let buttons = userSets.map(set => {
             return (
                 <button 
                     key={set.tag}
@@ -183,6 +184,7 @@ export default class Statistic extends React.Component {
                 <Menu 
                     active={this.state.activeSet} 
                     onClick={(set) => this.loadSets(set)}
+                    avalibleSets={Object.keys(this.state.sets)}
                 />
 
                 <div className="content">

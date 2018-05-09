@@ -98,9 +98,6 @@ const pack = {
 
             if (model.hasLegendary) sets[model.cardSet].pityTimer = 0;
 
-            console.log(sets);
-            console.log(model);
-
             Q.fcall(function () {
                 const deferred = Q.defer();
 

@@ -132,11 +132,14 @@ body#app {
 }
 
 .show-cards.classic {background-image: url('../images/classic.png')}
+.show-cards.gvg     {background-image: url('../images/gvg.png')}
+.show-cards.tgt     {background-image: url('../images/tgt.png')}
 .show-cards.wog     {background-image: url('../images/wog.png')}
 .show-cards.msg     {background-image: url('../images/msg.png')}
-.show-cards.jtu      {background-image: url('../images/jtu.png')}
-.show-cards.kft    {background-image: url('../images/kft.png')}
+.show-cards.jtu     {background-image: url('../images/jtu.png')}
+.show-cards.kft     {background-image: url('../images/kft.png')}
 .show-cards.kc      {background-image: url('../images/k&c.png')}
+.show-cards.tw      {background-image: url('../images/tw.png')}
 
 
 .content {
