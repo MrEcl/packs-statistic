@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 const {ipcRenderer} = require('electron');
+const _ = require('lodash');
 let remote = require('electron').remote;     
 let settings = remote.getGlobal('settings')
 
@@ -100,19 +101,25 @@ class Menu extends React.Component {
             {name: "Journey to Un'Goro", tag: 'jtu'},
             {name: "Knights of the Frozen Throne", tag: 'kft'},
             {name: "Kobolds & Catacombs", tag: 'kc'},
-            {name: "The Witchwood", tag: "tw"}
+            {name: "The Witchwood", tag: "tw"},
+            {name: "The Boomsday Project", tag: "bot"}
         ];
     }
 
     render() {
-        let userSets = this.sets.filter(set => this.props.avalibleSets.indexOf(set.name) >= 0);
-        let buttons = userSets.map(set => {
+        let userSets = Object.keys(this.props.avalibleSets);
+        let sets = this.sets.filter(set => userSets.indexOf(set.name) >= 0);
+
+        let buttons = sets.map(set => {
+            let pityTimer = this.props.avalibleSets[set.name].pityTimer;
+
             return (
                 <button 
                     key={set.tag}
                     className={'show-cards ' + set.tag + (this.props.active == set.name ? ' active' : '')}
                     onClick={() => this.props.onClick(set.name)}
                 >
+                <span className='badge'>{pityTimer}</span>
                 </button>
             )
         });
@@ -184,7 +191,7 @@ export default class Statistic extends React.Component {
                 <Menu 
                     active={this.state.activeSet} 
                     onClick={(set) => this.loadSets(set)}
-                    avalibleSets={Object.keys(this.state.sets)}
+                    avalibleSets={this.state.sets}
                 />
 
                 <div className="content">

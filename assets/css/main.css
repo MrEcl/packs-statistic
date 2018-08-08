@@ -140,6 +140,27 @@ body#app {
 .show-cards.kft     {background-image: url('../images/kft.png')}
 .show-cards.kc      {background-image: url('../images/k&c.png')}
 .show-cards.tw      {background-image: url('../images/tw.png')}
+.show-cards.bot      {background-image: url('../images/bot.png')}
+
+.show-cards .badge {
+    position: absolute;
+    top: 1px;
+    right: 14px;
+
+    display: inline-block;
+    padding: 3px;
+    height: 16px;
+    min-width: 16px;
+
+    color: #fff;
+    text-align: center;
+    font-size: 8px;
+    font-weight: 300;
+    
+    background-color: #dc3737;
+    border-radius: 8px;
+
+}
 
 
 .content {

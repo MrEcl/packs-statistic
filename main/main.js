@@ -4,25 +4,34 @@ import {pack, packController} from "./controller/pack.js";
 import {userController} from './controller/settings.js';
 
 const electron = require('electron');
-const {app, BrowserWindow, Menu} = electron;
+const {app, BrowserWindow, Menu, dialog} = electron;
 const nativeImage = require('electron').nativeImage;
 
 const _ = require('lodash');
 const Q = require('q');
 const fs = require('fs');
+const path = require('path');
 const LogWatcher = require('./libs/logWatcher.js');
 
-let icon = nativeImage.createFromPath(`${__dirname + '/..'}/icon2.png`);
+let iconPath = path.join(__dirname, '/..', 'icon2.png');
+let icon = nativeImage.createFromPath(iconPath);
 let menuTemplate = [
     {
         label: 'Packs Statistics',
         submenu: [
             {
-                label: 'Update cards',
+                label: 'Refresh statistic',
+                click: () => {
+                    rebuildPacks();
+                }
+            },
+            {
+                label: 'Update cards data',
                 click: () => {
                     updateCards();
                 }
             },
+            {type: 'separator'},
             {
                 label: 'Information'
             }
@@ -51,35 +60,29 @@ let menuTemplate = [
                     getLocation();
                 }
             },
-            {
-                label: 'Rebuild packs',
-                click: () => {
-                    rebuildPacks();
-                }
-            },
             // {
             //     label: 'Sendbox create new pack',
             //     click: () => {
-            //         pack.createNew({
+            //         pack.create({
             //             cards: [
             //                 {
-            //                     card: 'CS2_231',
-            //                     isGolden: true
-            //                 },
-            //                 {
-            //                     card: 'EX1_562',
+            //                     card: 'BOT_067',
             //                     isGolden: false
             //                 },
             //                 {
-            //                     card: 'CS2_231',
+            //                     card: 'BOT_251',
             //                     isGolden: false
             //                 },
             //                 {
-            //                     card: 'CS2_231',
+            //                     card: 'BOT_309',
             //                     isGolden: false
             //                 },
             //                 {
-            //                     card: 'CS2_231',
+            //                     card: 'BOT_413',
+            //                     isGolden: false
+            //                 },
+            //                 {
+            //                     card: 'BOT_402',
             //                     isGolden: false
             //                 }
             //             ]
@@ -96,8 +99,10 @@ let programSettings = {};
 // Main window
 let win;
 
+if (process.platform === 'darwin') {
+    app.dock.setIcon(icon);
+}
 
-app.dock.setIcon(icon);
 app.setName('Pack Statistics')
 
 // Program inited and ready to run
@@ -108,6 +113,7 @@ app.on('ready', () => {
         minHeight: 620,
         minWidth: 1000,
         backgroundColor: '#000',
+        icon: iconPath,
         webPreferences: { 
             experimentalFeatures: true 
         }
@@ -145,7 +151,9 @@ function updateCards () {
 };
 
 function getLocation () {
-    console.log('hello windows');
+    dialog.showOpenDialog({properties: ['openDirectory']}, function (path) {
+        console.log(path);
+    })
 }
 
 function rebuildPacks () {

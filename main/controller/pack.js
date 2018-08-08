@@ -50,17 +50,11 @@ const pack = {
         .then(function (cards) {
             let packCards = [];
 
-            model.hasLegendary = false;
-            model.createdAt    = now;
-            model.updatedAt    = now;
-            model.cardSet      = cards[0].cardSet;
-            model.dust         = 0;
-            model.pityTimer    = ++sets[model.cardSet].pityTimer;
-            // model.sandBox      = true;
-
             // define new cards set
-            if (!sets[pack.cardSet]) {
-                sets[pack.cardSet] = {
+            model.cardSet = cards[0].cardSet;
+
+            if (!sets[model.cardSet]) {
+                sets[model.cardSet] = {
                     quantity: 0,
                     common: 0,
                     rare: 0,
@@ -70,6 +64,13 @@ const pack = {
                     pityTimer: 0
                 };
             }
+
+            model.hasLegendary = false;
+            model.createdAt    = now;
+            model.updatedAt    = now;
+            model.dust         = 0;
+            model.pityTimer    = ++sets[model.cardSet].pityTimer;
+            // model.sandBox      = true;
 
             sets[model.cardSet].quantity++;
 
