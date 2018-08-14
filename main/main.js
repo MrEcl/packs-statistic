@@ -107,6 +107,50 @@ app.setName('Pack Statistics')
 
 // Program inited and ready to run
 app.on('ready', () => {
+    // Check for saved game path
+    let hsPath   = false;
+    let savePath = path.join(`${__dirname}`, '../', 'save');
+    let hasSave  = fs.existsSync(savePath);
+    if (hasSave) hsPath = fs.readFileSync(savePath);
+
+    checkHSPath(hsPath);
+});
+
+function checkHSPath (path) {
+    let hsExists = path ? false : true;
+
+    // Check for correct game location
+    if (/^win/.test(process.platform) && !path) {
+
+        let programFiles = 'Program Files';
+
+        if (process.arch === 'x64') programFiles += ' (x86)';
+
+        let HSPath = path.join('C:', programFiles, 'Hearthstone', 'Hearthstone_Data', 'log.config');
+        hsExists = fs.existsSync(HSPath);
+    }
+
+    if (path) hsExists = fs.existsSync(path);
+
+    if (hsExists) {
+        showMainWindow();
+    } else {
+        dialog.showOpenDialog({
+            properties: ['openFile'],
+            filters: [
+                {name: 'log', extensions: ['config']},
+            ],
+            title: 'Choose log.config file in Hearthstone directory'
+        }, 
+        function (newPath) {
+            let savePath = path.join(`${__dirname}`, '../', 'save');
+            fs.writeFileSync(savePath, newPath);
+            checkHSPath(newPath);
+        });
+    }
+}
+
+function showMainWindow () {
     win = new BrowserWindow({
         width: 1180, 
         height: 620,
@@ -120,9 +164,9 @@ app.on('ready', () => {
     });
 
     win.loadURL(`file://${__dirname + '/..'}/view/index.html`);
-
     Menu.setApplicationMenu(menu);
-});
+}
+
 
 function updateCards () {
     const unirest = require('unirest');
@@ -149,12 +193,6 @@ function updateCards () {
         win.child()
     });
 };
-
-function getLocation () {
-    dialog.showOpenDialog({properties: ['openDirectory']}, function (path) {
-        console.log(path);
-    })
-}
 
 function rebuildPacks () {
     pack.rebuild();
