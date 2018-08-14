@@ -116,32 +116,29 @@ app.on('ready', () => {
     checkHSPath(hsPath);
 });
 
-function checkHSPath (logPath) {
-    let hsExists = logPath ? false : true;
+function checkHSPath (HSPath) {
+    let hsExists = HSPath ? false : true;
 
     // Check for correct game location
-    if (/^win/.test(process.platform) && !logPath) {
+    if (/^win/.test(process.platform) && !HSPath) {
 
         let programFiles = 'Program Files';
 
         if (process.arch === 'x64') programFiles += ' (x86)';
 
-        let HSPath = path.join('C:', programFiles, 'Hearthstone', 'Hearthstone_Data', 'log.config');
+        let HSPath = path.join('C:', programFiles, 'Hearthstone');
         hsExists = fs.existsSync(HSPath);
     }
 
-    if (logPath) hsExists = fs.existsSync(path);
+    if (HSPath) hsExists = fs.existsSync(HSPath);
 
     if (hsExists) {
-        runLogWatcher(logPath);
+        runLogWatcher(HSPath);
         showMainWindow();
     } else {
         dialog.showOpenDialog({
-            properties: ['openFile'],
-            filters: [
-                {name: 'log', extensions: ['config']},
-            ],
-            title: 'Choose log.config file in Hearthstone directory'
+            properties: ['openDirectory'],
+            title: 'Choose Hearthstone directory'
         }, 
         function (newPath) {
             let savePath = path.join(`${__dirname}`, '../', 'save');
@@ -207,10 +204,10 @@ function globalPlay () {
 /****************************************************************************
  * Card gaining logic
  */
-function runLogWatcher (configPath) {
+function runLogWatcher (hsPath) {
     // Cards gaining
     let params = {};
-    if (configPath) params = {configFile: configPath};
+    if (hsPath) params = {logFile: path.join(hsPath, 'Hearthstone_Data', 'output_log.txt')};
 
     let lw = new LogWatcher(params);
     let openingPack = false;
