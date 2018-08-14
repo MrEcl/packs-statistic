@@ -133,6 +133,7 @@ function checkHSPath (path) {
     if (path) hsExists = fs.existsSync(path);
 
     if (hsExists) {
+        runLogWatcher(path);
         showMainWindow();
     } else {
         dialog.showOpenDialog({
@@ -206,48 +207,52 @@ function globalPlay () {
 /****************************************************************************
  * Card gaining logic
  */
+function runLogWatcher (configPath) {
+    // Cards gaining
+    let params = {};
+    if (configPath) params = {configFile: configPath};
 
-// Cards gaining
-let lw = new LogWatcher();
-let openingPack = false;
-let cardCounter = 0;
-let newPack = {cards: []};
+    let lw = new LogWatcher(params);
+    let openingPack = false;
+    let cardCounter = 0;
+    let newPack = {cards: []};
 
-// LogWatcher events
-lw.on('card-gained', (data) => {
-    let card = {
-        card: data.cardId,
-        isGolden: data.isGolden
-    };
+    // LogWatcher events
+    lw.on('card-gained', (data) => {
+        let card = {
+            card: data.cardId,
+            isGolden: data.isGolden
+        };
 
-    console.log('card-gained:', data);
+        console.log('card-gained:', data);
 
-    if (openingPack) {
-        newPack.cards.push(card);
+        if (openingPack) {
+            newPack.cards.push(card);
 
-        cardCounter++;
-    } else {
-        console.log('This is gift card. I wont count this one');
-        //card.create(card);
-    }
+            cardCounter++;
+        } else {
+            console.log('This is gift card. I wont count this one');
+            //card.create(card);
+        }
 
-    // Close boster opening and set counter back to zero;
-    if (cardCounter == 5) {
-        pack.create(newPack)
-        
-        openingPack = false;
-        cardCounter = 0;
-        newPack = {cards: []};
-    }
-});
+        // Close boster opening and set counter back to zero;
+        if (cardCounter == 5) {
+            pack.create(newPack)
+            
+            openingPack = false;
+            cardCounter = 0;
+            newPack = {cards: []};
+        }
+    });
 
-lw.on('open-booster',  () => {
-    console.log('Opens a pack');
-    openingPack = true;
-});
+    lw.on('open-booster',  () => {
+        console.log('Opens a pack');
+        openingPack = true;
+    });
 
-// Start watching logs
-lw.start();
+    // Start watching logs
+    lw.start();
+}
 
 
 //Load controllers
