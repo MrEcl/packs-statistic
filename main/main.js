@@ -116,11 +116,11 @@ app.on('ready', () => {
     checkHSPath(hsPath);
 });
 
-function checkHSPath (path) {
-    let hsExists = path ? false : true;
+function checkHSPath (logPath) {
+    let hsExists = logPath ? false : true;
 
     // Check for correct game location
-    if (/^win/.test(process.platform) && !path) {
+    if (/^win/.test(process.platform) && !logPath) {
 
         let programFiles = 'Program Files';
 
@@ -130,10 +130,10 @@ function checkHSPath (path) {
         hsExists = fs.existsSync(HSPath);
     }
 
-    if (path) hsExists = fs.existsSync(path);
+    if (logPath) hsExists = fs.existsSync(path);
 
     if (hsExists) {
-        runLogWatcher(path);
+        runLogWatcher(logPath);
         showMainWindow();
     } else {
         dialog.showOpenDialog({
