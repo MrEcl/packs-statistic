@@ -111,7 +111,7 @@ app.on('ready', () => {
     let hsPath   = false;
     let savePath = path.join(`${__dirname}`, '../', 'save');
     let hasSave  = fs.existsSync(savePath);
-    if (hasSave) hsPath = fs.readFileSync(savePath);
+    if (hasSave) hsPath = fs.readFileSync(savePath, 'utf8');
 
     checkHSPath(hsPath);
 });
