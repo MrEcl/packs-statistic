@@ -7,8 +7,6 @@ const electron = require('electron');
 const {app, BrowserWindow, Menu, dialog} = electron;
 const nativeImage = require('electron').nativeImage;
 
-const _ = require('lodash');
-const Q = require('q');
 const fs = require('fs');
 const path = require('path');
 const LogWatcher = require('./libs/logWatcher.js');
@@ -94,7 +92,6 @@ let menuTemplate = [
 ];
 
 let menu = Menu.buildFromTemplate(menuTemplate);
-let programSettings = {};
 
 // Main window
 let win;
@@ -167,9 +164,6 @@ function showMainWindow () {
 
 
 function updateCards () {
-    const unirest = require('unirest');
-    const path = require('path')
-
     let child = new BrowserWindow({
         parent: win, 
 

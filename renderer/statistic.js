@@ -111,7 +111,7 @@ class Menu extends React.Component {
         let sets = this.sets.filter(set => userSets.indexOf(set.name) >= 0);
 
         let buttons = sets.map(set => {
-            let pityTimer = this.props.avalibleSets[set.name].pityTimer;
+            let pityTimer = this.props.avalibleSets[set.name] ? this.props.avalibleSets[set.name].pityTimer : 0;
 
             return (
                 <button 
@@ -178,8 +178,28 @@ export default class Statistic extends React.Component {
     }
 
     render() {
+        let bgUrl = false;
+
+
+        if (this.state.activeSet) {
+            let setWords = this.state.activeSet.split(' ');
+            let setTags = '';
+            
+            setWords.forEach(word => {
+                setTags += word.charAt(0);
+            });
+
+            bgUrl = `url(../assets/images/${setTags.toLowerCase()}-bg.jpg)`;
+            
+        }
+        console.log(bgUrl);
+
+        let divStyle = {
+            'backgroundImage': bgUrl || 'none'
+        }
+
         return (
-            <div>
+            <div style={divStyle} className="container">
                 <div id="heading" className="heading">
                     <div id="title">{this.state.activeSet || 'Hearthstone Packs'}</div>
 

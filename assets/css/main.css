@@ -4,11 +4,11 @@ body#app {
     background: #000506;
     color: #fff;
     margin: 0;
-    background-image: url('../images/bg.jpg');
+    background-image: url('../images/c-bg.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
-    background-position: 0 -25px;
+    /* background-position: 0 -25px; */
 
     overflow: hidden;
     max-height: 100%;
@@ -18,6 +18,17 @@ body#app {
                  "Droid Sans","Helvetica Neue",sans-serif;
 
     /* user-select: none; */
+}
+
+.container {
+    display: inline-block;
+    width: 100%;
+
+    background-image: url('../images/bg.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    /* background-position: 0 -25px; */
 }
 
 .heading {
